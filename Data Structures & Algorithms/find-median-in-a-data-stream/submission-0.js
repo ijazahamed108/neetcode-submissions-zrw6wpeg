@@ -1,0 +1,43 @@
+class MedianFinder {
+    constructor() {
+        this.small = new PriorityQueue((a,b)=> b-a); // max heap for smaller half
+        this.large = new PriorityQueue((a,b) => a-b); // min heap for larger half
+    }
+
+    /**
+     *
+     * @param {number} num
+     * @return {void}
+     */
+    addNum(num) {
+        if(this.large.isEmpty() || num > this.large.front()){
+            this.large.enqueue(num);
+        } else {
+            this.small.enqueue(num);
+        }
+
+        if(this.small.size() > this.large.size()+1){
+            this.large.enqueue(this.small.dequeue())
+        } else if(this.large.size() > this.small.size()+1){
+            this.small.enqueue(this.large.dequeue())
+        }
+    }
+
+    /**
+     * @return {number}
+     */
+    findMedian() {
+
+        //odd length directly return front
+        // in case of equal length
+        if(this.small.size() > this.large.size()){
+            return this.small.front();
+        }else if(this.large.size() > this.small.size()){
+            return this.large.front();
+        } else {
+            return ( (this.small.front() + this.large.front())/2.0)
+        }
+
+
+    }
+}
